@@ -35,7 +35,7 @@ numlib::Dense<Type>::operator = (
 
 template <class Type>
 numlib::Dense<Type>::Dense(
-  Matrix<Type,Dense> const &src):
+  MatrixCRTP<Type,Dense> const &src):
   Dense(static_cast<const Dense<Type>&>(src))
 {
 }
@@ -58,11 +58,11 @@ numlib::Dense<Type>::Dense(
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::MatrixCRTP<Type,numlib::Dense>&
 numlib::Dense<Type>::operator += (
-  Matrix<Type,F> const &rhs)
+  MatrixCRTP<Type,F> const &rhs)
 {
-  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("Matrix addition with operator += failed");
+  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("MatrixCRTP addition with operator += failed");
   for(std::size_t i=0; i<n_; ++i)
   {
     for(std::size_t j=0; j<m_; ++j)
@@ -75,11 +75,11 @@ numlib::Dense<Type>::operator += (
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::MatrixCRTP<Type,numlib::Dense>&
 numlib::Dense<Type>::operator -= (
-  Matrix<Type,F> const &rhs)
+  MatrixCRTP<Type,F> const &rhs)
 {
-  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("Matrix addition with operator += failed");
+  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("MatrixCRTP addition with operator += failed");
   for(std::size_t i=0; i<n_; ++i)
   {
     for(std::size_t j=0; j<m_; ++j)

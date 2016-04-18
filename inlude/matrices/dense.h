@@ -10,7 +10,7 @@
 #define DENSE_H_
 
 #include <utility>
-#include "matrix.h"
+#include "matrixcrtp.h"
 
 namespace numlib
 {
@@ -24,7 +24,7 @@ namespace numlib
     Dense<Type> &d2);
 
   template <class Type>
-  class Dense: public Matrix<Type,Dense>
+  class Dense: public MatrixCRTP<Type,Dense>
   {
     public:
       Dense() = default;
@@ -41,19 +41,17 @@ namespace numlib
       Dense(
         Dense<Type> const &src);
       Dense(
-        Matrix<Type,Dense> const &src);
+        MatrixCRTP<Type,Dense> const &src);
       Dense(
         Dense<Type> &&other);
       ~Dense() {}
-      // Basic Matrix Math operations
-      template <template <class> class F>
-      Matrix<Type,Dense>& operator += (Matrix<Type,F> const &rhs);
+      // Basic MatrixCRTP Math operations
+      Matrix<Type>& operator += (Matrix<Type> const &rhs);
 
-      template <template <class> class F>
-      Matrix<Type,Dense>& operator -= (Matrix<Type,F> const &rhs);
+      Matrix<Type>& operator -= (Matrix<Type> const &rhs);
 
       // template <class F>
-      // Form<Type> operator * (Matrix<F> const &rhs) const
+      // Form<Type> operator * (MatrixCRTP<F> const &rhs) const
       // {
       //   return static_cast<const Form&>(*this) * rhs;
       // }
@@ -63,7 +61,7 @@ namespace numlib
       //   return static_cast<const Form&>(*this) * rhs;
       // }
 
-      // Basic Matrix projection, syntax like mat[{i,j}]
+      // Basic MatrixCRTP projection, syntax like mat[{i,j}]
       Type operator[](numlib::Vector<std::size_t> ij) const;
       Type& operator[](numlib::Vector<std::size_t> ij);
 

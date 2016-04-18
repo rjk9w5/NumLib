@@ -8,8 +8,8 @@ using namespace numlib;
 int main(int narg, char** args)
 {
   Dense<double> dmat;
-  Matrix<double,Dense>* dmat2 = new Dense<double>(4,5);
-  std::shared_ptr<Matrix<double,Dense>> cldmat2;
+  Matrix<double>* dmat2 = new Dense<double>(4,5);
+  std::shared_ptr<MatrixCRTP<double,Dense>> cldmat2;
 
   for(std::size_t i=0; i<4; ++i)
   {
@@ -20,7 +20,7 @@ int main(int narg, char** args)
     }
   }
   cldmat2 = dmat2->clone();
-  dmat = *dmat2;
+  dmat = *static_cast<Dense<double>*>(dmat2);
   // dmat2 += dmat2;
   dmat2->operator+=(*dmat2);
   cldmat2->operator+(dmat);

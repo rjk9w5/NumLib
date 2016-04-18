@@ -12,21 +12,14 @@
 #include "../vector/vector.h"
 #include <memory>
 #include <ostream>
-#include <iomanip>
 
 namespace numlib
 {
-  template <class Type, template<class> class Form>
+  template <class Type>
   class Matrix;
 
-  template <class Type, template<class> class Form>
-  std::ostream&
-  operator << (
-    std::ostream &out,
-    Matrix<Type,Form> const &mat);
-
-  template <class Type, template<class> class Form>
-  class Matrix
+  template <class Type>
+  class Matrix:public virtual Matrix<Type>
   {
     public:
       // Matrix<Type,Form>&
@@ -38,18 +31,9 @@ namespace numlib
       // }
 
       // Basic Matrix Math operations
-      template <template <class> class F>
-      Matrix<Type,Form>& operator + (Matrix<Type,F> const &rhs) const
-      {
-        std::shared_ptr<Matrix<Type,Form>> ret = clone();
-        return static_cast<Form<Type>*>(ret.get())->operator+=(rhs);
-      }
+      virtual Matrix<Type>& operator + (Matrix<Type> const &rhs) const = 0;
 
-      template <template <class> class F>
-      Matrix<Type,Form>& operator += (Matrix<Type,F> const &rhs)
-      {
-        return static_cast<Form<Type>*>(this)->operator+=(rhs);
-      }
+      virtual Matrix<Type>& operator += (Matrix<Type> const &rhs) = 0;
 
       // template <class F>
       // Form<Type> operator - (Matrix<F> const &rhs) const
@@ -69,42 +53,21 @@ namespace numlib
       // }
 
       // Basic Matrix projection, syntax like mat[{i,j}]
-      Type operator[](numlib::Vector<std::size_t> ij) const
-      {
-        return static_cast<const Form<Type>*>(this)->operator[](ij);
-      }
+      virtual Type operator[](numlib::Vector<std::size_t> ij) const = 0;
 
-      Type& operator[](numlib::Vector<std::size_t> ij)
-      {
-        return static_cast<Form<Type>*>(this)->operator[](ij);
-      }
+      virtual Type& operator[](numlib::Vector<std::size_t> ij) = 0;
 
       // Clone idiom for copying
-      std::shared_ptr<Matrix<Type, Form>> clone() const
-      {
-        return static_cast<const Form<Type>*>(this)->clone();
-      }
+      virtual std::shared_ptr<Matrix<Type>&> clone() const = 0;
 
-      std::size_t N() const
-      {
-        return static_cast<const Form<Type>*>(this)->N();
-      }
+      virtual std::size_t N() const = 0;
 
-      std::size_t M() const
-      {
-        return static_cast<const Form<Type>*>(this)->M();
-      }
+      virtual std::size_t M() const = 0;
+
+      virtual void print(std::ostream &out) const = 0;
   }; // class Matrix
 
-  template <class Type, template<class> class Form>
-  std::ostream&
-  operator << (
-    std::ostream &out,
-    Matrix<Type,Form> const &mat)
-  {
-    static_cast<const Form<Type>*>(&mat)->print(out);
-    return out;
-  }
 } // namespace numlib
 
-#endif
+#endif 
+// MATRIX_H_
