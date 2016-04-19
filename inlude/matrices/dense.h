@@ -47,25 +47,31 @@ namespace numlib
       ~Dense() {}
       // Basic Matrix Math operations
       template <template <class> class F>
+      Matrix<Type,Dense>& operator + (Matrix<Type,F> const &rhs) const;
+
+      template <template <class> class F>
       Matrix<Type,Dense>& operator += (Matrix<Type,F> const &rhs);
+
+      template <template <class> class F>
+      Matrix<Type,Dense>& operator - (Matrix<Type,F> const &rhs) const;
 
       template <template <class> class F>
       Matrix<Type,Dense>& operator -= (Matrix<Type,F> const &rhs);
 
-      // template <class F>
-      // Form<Type> operator * (Matrix<F> const &rhs) const
-      // {
-      //   return static_cast<const Form&>(*this) * rhs;
-      // }
-      //
+      template <class F>
+      Form<Type> operator * (Matrix<F> const &rhs) const
+      {
+        return static_cast<const Form&>(*this) * rhs;
+      }
+      
       // Form<Type> operator * (Vector<Type> const &rhs) const
       // {
       //   return static_cast<const Form&>(*this) * rhs;
       // }
 
       // Basic Matrix projection, syntax like mat[{i,j}]
-      Type operator[](numlib::Vector<std::size_t> ij) const;
-      Type& operator[](numlib::Vector<std::size_t> ij);
+      Type operator[](std::initializer_list<std::size_t> ij) const;
+      Type& operator[](std::initializer_list<std::size_t> ij);
 
       // Clone idiom for copying
       std::shared_ptr<Dense<Type>> clone() const;

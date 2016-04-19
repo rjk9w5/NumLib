@@ -1,4 +1,3 @@
-#include "matrix.h"
 #include "dense.h"
 #include <iostream>
 
@@ -7,32 +6,40 @@ using namespace numlib;
 
 int main(int narg, char** args)
 {
-  Dense<double> dmat;
-  Matrix<double,Dense>* dmat2 = new Dense<double>(4,5);
-  std::shared_ptr<Matrix<double,Dense>> cldmat2;
-
-  for(std::size_t i=0; i<4; ++i)
+  try
   {
-    for(std::size_t j=0; j<5; ++j)
+    Dense<double> dmat2(4,5);
+    // Matrix<double,Dense>* dmat2 = new Dense<double>(4,5);
+
+    for(std::size_t i=0; i<4; ++i)
     {
-      dmat2->operator[]({i,j}) = i*j + 1;
-      // dmat2[{i,j}] = i*j+1;
+      for(std::size_t j=0; j<5; ++j)
+      {
+        // dmat2->operator[]({i,j}) = i*j + 1;
+        dmat2[{i,j}] = i*j+1;
+      }
     }
+
+    std::cout << "Assigned Matrix values\n";
+
+    // dmat = *dmat2;
+    // dmat2 += dmat2;
+    // dmat2->operator+=(*dmat2);
+    // dmat = *dmat2 - dmat;
+    dmat2 = dmat2 - dmat2;
+    // dmat=(*dmat2 + *dmat2);
+    // std::cout << dmat2 + dmat2 << '\n';
+
+    std::cout << dmat2 << '\n';
+
+    // std::cout << dmat << '\n';
+
+    if(narg>1) std::cout << args[1] << '\n';
+    // delete dmat2;
   }
-  cldmat2 = dmat2->clone();
-  dmat = *dmat2;
-  // dmat2 += dmat2;
-  dmat2->operator+=(*dmat2);
-  cldmat2->operator+(dmat);
-  // dmat=(*dmat2 + *dmat2);
-
-  // std::cout << dmat2 + dmat2 << '\n';
-
-  std::cout << *dmat2 << '\n';
-
-  std::cout << *cldmat2 << '\n';
-
-  if(narg>1) std::cout << args[1] << '\n';
-  delete dmat2;
+  catch(Exception& e)
+  {
+    std::cerr << e.errMsg() << '\n';
+  }
   return 0;
 }

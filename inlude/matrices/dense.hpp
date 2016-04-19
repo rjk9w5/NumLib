@@ -37,8 +37,7 @@ template <class Type>
 numlib::Dense<Type>::Dense(
   Matrix<Type,Dense> const &src):
   Dense(static_cast<const Dense<Type>&>(src))
-{
-}
+{}
 
 template <class Type>
 numlib::Dense<Type>::Dense(
@@ -55,6 +54,16 @@ numlib::Dense<Type>::Dense(
   n_(other.n_),
   m_(other.m_)
 {}
+
+template <class Type>
+template <template <class> class F>
+numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>::operator + (
+  Matrix<Type,F> const &rhs) const
+{
+  numlib::Dense<Type> ret(*this);
+  return ret+=rhs;
+}
 
 template <class Type>
 template <template <class> class F>
@@ -76,6 +85,16 @@ numlib::Dense<Type>::operator += (
 template <class Type>
 template <template <class> class F>
 numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>::operator - (
+  Matrix<Type,F> const &rhs) const
+{
+  numlib::Dense<Type> ret(*this);
+  return ret-=rhs;
+}
+
+template <class Type>
+template <template <class> class F>
+numlib::Matrix<Type,numlib::Dense>&
 numlib::Dense<Type>::operator -= (
   Matrix<Type,F> const &rhs)
 {
@@ -91,15 +110,17 @@ numlib::Dense<Type>::operator -= (
 }
 
 template <class Type>
-Type numlib::Dense<Type>::operator[](numlib::Vector<std::size_t> ij) const
+Type numlib::Dense<Type>::operator[](std::initializer_list<std::size_t> ij) const
 {
-  return data_[ij[0]*m_ + ij[1]];
+  if(ij.size() != 2 || *(ij.begin()) >= n_ || *(ij.begin()+1) >= m_) throw RangeException("Dense op []");
+
+  return data_[*(ij.begin())*m_ + *(ij.begin()+1)];
 }
 
 template <class Type>
-Type& numlib::Dense<Type>::operator[](numlib::Vector<std::size_t> ij)
+Type& numlib::Dense<Type>::operator[](std::initializer_list<std::size_t> ij)
 {
-  return data_[ij[0]*m_ + ij[1]];
+  return data_[*(ij.begin())*m_ + *(ij.begin()+1)];
 }
 
 // Clone idiom for copying
@@ -145,7 +166,8 @@ numlib::Dense<Type>::print(
     {
       for(std::size_t j=0; j<m_; ++j)
       {
-        out << std::left << std::setw(8) << std::scientific << this->operator[]({i,j}) << ' ';
+        out << std::left << std::setw(8) << std::scientific
+            << data_[i*m_ + j] << ' ';
       }
       out << '\n';
     }
