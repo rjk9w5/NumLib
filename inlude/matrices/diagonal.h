@@ -53,20 +53,20 @@ namespace numlib
 
       // Basic Matrix Math operations
       template <template <class> class F>
-      Diag<Type> operator + (Matrix<Type,F> const &rhs) const;
+      Matrix<Type,F>& operator + (Matrix<Type,F> const &rhs) const;
 
       template <template <class> class F>
       Diag<Type>& operator += (Matrix<Type,F> const &rhs);
 
       template <template <class> class F>
-      Diag<Type> operator - (Matrix<Type,F> const &rhs) const;
+      Matrix<Type,F>& operator - (Matrix<Type,F> const &rhs) const;
 
       template <template <class> class F>
       Diag<Type>& operator -= (Matrix<Type,F> const &rhs);
 
       template <template <class> class F>
       Matrix<Type,F>& operator * (Matrix<Type,F> const &rhs) const;
-      
+
       Vector<Type> operator * (Vector<Type> const &rhs) const;
 
       // Basic Matrix projection, syntax like mat[{i,j}]
@@ -91,7 +91,6 @@ namespace numlib
       numlib::Vector<Type> data_;
       std::size_t n_;
       constexpr static const Type __empty_const__ = 0;
-      constexpr static Type __empty__ = 0;
   }; // class Diag
 } // namespace numlib
 

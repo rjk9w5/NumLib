@@ -56,12 +56,19 @@ numlib::Diag<Type>::Diag(
 
 template <class Type>
 template <template <class> class F>
-numlib::Diag<Type>
+numlib::Matrix<Type,F>&
 numlib::Diag<Type>::operator + (
   Matrix<Type,F> const &rhs) const
 {
-  numlib::Diag<Type> ret(*this);
-  return ret+=rhs;
+  if(N()!=rhs.N()||M()!=rhs.M())
+    throw DimensionMismatch("Matrix addition with operator + failed");
+  Matrix<Type,F>* ret = new F<Type>(rhs);
+
+  for(std::size_t i=0;i<N();++i)
+  {
+    ret->operator[]({i,i})+=data_[i];
+  }
+  return *ret;
 }
 
 template <class Type>
@@ -70,7 +77,7 @@ numlib::Diag<Type>&
 numlib::Diag<Type>::operator += (
   Matrix<Type,F> const &rhs)
 {
-  if(N()!=rhs.N()||M()!=rhs.M()) 
+  if(N()!=rhs.N()||M()!=rhs.M())
     throw DimensionMismatch("Matrix addition with operator += failed");
 
   for(std::size_t i=0; i<N(); ++i)
@@ -82,12 +89,19 @@ numlib::Diag<Type>::operator += (
 
 template <class Type>
 template <template <class> class F>
-numlib::Diag<Type>
+numlib::Matrix<Type,F>&
 numlib::Diag<Type>::operator - (
   Matrix<Type,F> const &rhs) const
 {
-  numlib::Diag<Type> ret(*this);
-  return ret-=rhs;
+  if(N()!=rhs.N()||M()!=rhs.M())
+    throw DimensionMismatch("Matrix addition with operator - failed");
+  Matrix<Type,F>* ret = new F<Type>(rhs);
+
+  for(std::size_t i=0;i<N();++i)
+  {
+    ret->operator[]({i,i})+=data_[i];
+  }
+  return *ret;
 }
 
 template <class Type>
@@ -112,7 +126,7 @@ numlib::Matrix<Type,F>&
 numlib::Diag<Type>::operator * (
   Matrix<Type,F> const &rhs) const
 {
-  if(M() != rhs.N()) 
+  if(M() != rhs.N())
     throw numlib::DimensionMismatch(
       "numlib::Diag<Type>operator *(Matrix<Type,F> const &rhs)");
 
@@ -130,7 +144,7 @@ numlib::Diag<Type>::operator * (
 }
 
 template <class Type>
-numlib::Vector<Type> 
+numlib::Vector<Type>
 numlib::Diag<Type>::operator * (
   Vector<Type> const &rhs) const
 {
@@ -151,7 +165,7 @@ template <class Type>
 Type numlib::Diag<Type>::operator[](
   std::initializer_list<std::size_t> ij) const
 {
-  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M())
     throw RangeException("Diag op []");
 
   if(*(ij.begin())==*(ij.begin()+1))
@@ -164,9 +178,9 @@ template <class Type>
 Type& numlib::Diag<Type>::operator[](
   std::initializer_list<std::size_t> ij)
 {
-  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M())
     throw RangeException("Diag op []");
-  
+
   if(*(ij.begin())==*(ij.begin()+1))
   {
     return data_[*(ij.begin())];
@@ -219,7 +233,7 @@ numlib::Diag<Type>::checkj(
 
 template <class Type>
 void numlib::swap(
-  Diag<Type> &d1, 
+  Diag<Type> &d1,
   Diag<Type> &d2)
 {
   using std::swap;
