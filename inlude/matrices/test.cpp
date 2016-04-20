@@ -28,11 +28,12 @@ int main(int narg, char** args)
         tm0[{i,j}] = i*j+1;
       }
     }
+
     dmat2 = tm0.clone();
     std::cout << tm0 << '\n';
 
     std::cout << "Assigned Matrix values\n";
-    std::cout << diagtwos*tm0 << '\n';
+    std::cout << diagtwos + tm0 << '\n';
     tm0 = diagtwos*tm0;
     std::cout << tm0 - *dmat2 << '\n';
     v = eye<double>(c)*v;
