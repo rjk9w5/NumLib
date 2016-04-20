@@ -477,7 +477,6 @@ namespace numlib
       Vector<Ele_T>& sort();
       Ele_T* begin() const;
       Ele_T* end() const;
-      //Vector<Ele_T> slice(const Ele_T* start=begin(), const Ele_T* stop=end(), const size_t step=1) const;
       int find(const Ele_T& val);
       void ele_swap(std::size_t const i1, std::size_t const i2);
 

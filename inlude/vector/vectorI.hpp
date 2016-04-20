@@ -8,20 +8,23 @@
  */
 
 template <class T>
-numlib::Vector<T>::Vector(): size_(0), data_(nullptr)
+numlib::Vector<T>::Vector(): size_(0)
 {
+  allocate();
 }
 
 template <class T>
 numlib::Vector<T>::Vector(const size_t size):
-    size_(size), data_(new T[size_?size_:0])
+    size_(size)
 {
+  allocate();
 }
 
 template <class T>
 numlib::Vector<T>::Vector(const size_t size, const T& value):
-    size_(size), data_(new T[size_?size_:0])
+    size_(size)
 {
+  allocate();
   for(size_t i=0; i < size_; ++i)
   {
     data_[i] = value;
@@ -136,18 +139,14 @@ void numlib::Vector<T>::set_size(const size_t size)
 template <class T>
 void numlib::Vector<T>::remove(const size_t i)
 {
-  if(i < size_ && i >=0)
-  {
-    for(size_t j = i; j < size_ - 1; ++j)
-      data_[j] = data_[j+1];
-
-    size_--;
-  }
-  else
-  {
+  if(!(i < size_ && i >=0))
     throw numlib::FatalError("numlib::Vector<T>::remove(const size_t i): "\
                          "Index 'i' is out of range\n");
-  }
+  
+  for(size_t j = i; j < size_ - 1; ++j)
+    data_[j] = data_[j+1];
+
+  size_--;
 
   return;
 }
@@ -345,8 +344,7 @@ numlib::Vector<T>& numlib::Vector<T>::operator -= (const numlib::Vector<T>& vec)
 template <class Ele_T>
 void numlib::Vector<Ele_T>::allocate()
 {
-  data_ = new Ele_T[size_];
-
+  data_ = (size_?new Ele_T[size_]:nullptr);
   return;
 }
 
