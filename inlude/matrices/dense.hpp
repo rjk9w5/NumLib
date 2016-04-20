@@ -21,7 +21,8 @@ numlib::Dense<Type>::Dense(
   data_(n*m),
   n_(n),
   m_(m)
-{}
+{
+}
 
 template <class Type>
 numlib::Dense<Type>&
@@ -37,7 +38,8 @@ template <class Type>
 numlib::Dense<Type>::Dense(
   Matrix<Type,Dense> const &src):
   Dense(static_cast<const Dense<Type>&>(src))
-{}
+{
+}
 
 template <class Type>
 numlib::Dense<Type>::Dense(
@@ -45,7 +47,8 @@ numlib::Dense<Type>::Dense(
   data_(src.data_),
   n_(src.n_),
   m_(src.m_)
-{}
+{
+}
 
 template <class Type>
 numlib::Dense<Type>::Dense(
@@ -57,7 +60,7 @@ numlib::Dense<Type>::Dense(
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>
 numlib::Dense<Type>::operator + (
   Matrix<Type,F> const &rhs) const
 {
@@ -67,14 +70,16 @@ numlib::Dense<Type>::operator + (
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>&
 numlib::Dense<Type>::operator += (
   Matrix<Type,F> const &rhs)
 {
-  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("Matrix addition with operator += failed");
-  for(std::size_t i=0; i<n_; ++i)
+  if(N()!=rhs.N()||M()!=rhs.M()) 
+    throw DimensionMismatch("Matrix addition with operator += failed");
+
+  for(std::size_t i=0; i<N(); ++i)
   {
-    for(std::size_t j=0; j<m_; ++j)
+    for(std::size_t j=0; j<M(); ++j)
     {
       this->operator[]({i,j}) += rhs[{i,j}];
     }
@@ -84,7 +89,7 @@ numlib::Dense<Type>::operator += (
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>
 numlib::Dense<Type>::operator - (
   Matrix<Type,F> const &rhs) const
 {
@@ -94,14 +99,16 @@ numlib::Dense<Type>::operator - (
 
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,numlib::Dense>&
+numlib::Dense<Type>&
 numlib::Dense<Type>::operator -= (
   Matrix<Type,F> const &rhs)
 {
-  if(n_!=rhs.N()||m_!=rhs.M()) throw DimensionMismatch("Matrix addition with operator += failed");
-  for(std::size_t i=0; i<n_; ++i)
+  if(N()!=rhs.N()||M()!=rhs.M()) 
+    throw DimensionMismatch("Matrix addition with operator += failed");
+
+  for(std::size_t i=0; i<N(); ++i)
   {
-    for(std::size_t j=0; j<m_; ++j)
+    for(std::size_t j=0; j<M(); ++j)
     {
       this->operator[]({i,j}) -= rhs[{i,j}];
     }
@@ -110,17 +117,72 @@ numlib::Dense<Type>::operator -= (
 }
 
 template <class Type>
-Type numlib::Dense<Type>::operator[](std::initializer_list<std::size_t> ij) const
+template <template <class> class F>
+numlib::Dense<Type>
+numlib::Dense<Type>::operator * (
+  Matrix<Type,F> const &rhs) const
 {
-  if(ij.size() != 2 || *(ij.begin()) >= n_ || *(ij.begin()+1) >= m_) throw RangeException("Dense op []");
+  if(M() != rhs.N()) 
+    throw numlib::DimensionMismatch(
+      "numlib::Dense<Type>operator *(Matrix<Type,F> const &rhs)");
 
-  return data_[*(ij.begin())*m_ + *(ij.begin()+1)];
+  Dense<Type> ret(N(), rhs.M());
+
+  for(std::size_t i=0; i<N(); ++i)
+  {
+    for(std::size_t j=0; j<M(); ++j)
+    {
+      ret[{i,j}] = 0;
+      for(std::size_t k=0; k<N(); ++k)
+      {
+        ret[{i,j}] += this->operator[]({i,k})*rhs[{k,j}];
+      }
+    }
+  }
+
+  return ret;
 }
 
 template <class Type>
-Type& numlib::Dense<Type>::operator[](std::initializer_list<std::size_t> ij)
+numlib::Vector<Type> 
+numlib::Dense<Type>::operator * (
+  Vector<Type> const &rhs) const
 {
-  return data_[*(ij.begin())*m_ + *(ij.begin()+1)];
+  if(M() != rhs.get_size())
+    throw DimensionMismatch("Dense::operator *(Vector): Vector");
+
+  Vector<Type> ret(rhs);
+
+  for(std::size_t i=0; i<N(); ++i)
+  {
+    ret[i] = 0;
+    for(std::size_t k=0; k<M(); ++k)
+    {
+      ret[i] += this->operator[]({i,k})*rhs[k];
+    }
+  }
+
+  return ret;
+}
+
+template <class Type>
+Type numlib::Dense<Type>::operator[](
+  std::initializer_list<std::size_t> ij) const
+{
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+    throw RangeException("Dense op []");
+
+  return data_[*(ij.begin())*M() + *(ij.begin()+1)];
+}
+
+template <class Type>
+Type& numlib::Dense<Type>::operator[](
+  std::initializer_list<std::size_t> ij)
+{
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+    throw RangeException("Dense op []");
+
+  return data_[*(ij.begin())*M() + *(ij.begin()+1)];
 }
 
 // Clone idiom for copying
@@ -146,7 +208,25 @@ numlib::Dense<Type>::M() const
 }
 
 template <class Type>
-void numlib::swap(Dense<Type> &d1, Dense<Type> &d2)
+inline bool
+numlib::Dense<Type>::checki(
+    std::size_t const i) const
+{
+  return (n_)&&(i<n_);
+}
+
+template <class Type>
+inline bool
+numlib::Dense<Type>::checkj(
+    std::size_t const j) const
+{
+  return (m_)&&(j<m_);
+}
+
+template <class Type>
+void numlib::swap(
+  Dense<Type> &d1, 
+  Dense<Type> &d2)
 {
   using std::swap;
   std::swap(d1.data_,d2.data_);

@@ -30,13 +30,14 @@ namespace numlib
   class Matrix
   {
     public:
-      // Matrix<Type,Form>&
-      // operator = (
-      //   Matrix<Type,Form> const &src)
-      // {
-      //   std::cout << "op = from Matrix<Type,Form>\n";
-      //   return this->operator=(static_cast<const Form<Type>&>(src));
-      // }
+      Matrix<Type,Form>&
+      operator = (
+      Matrix<Type,Form> const &src)
+      {
+        return static_cast<Form<Type>*>(this)->operator=(src);
+      }
+
+      ~Matrix() {}
 
       // Basic Matrix Math operations
       template <template <class> class F>
@@ -63,16 +64,16 @@ namespace numlib
         return static_cast<Form<Type>*>(this)->operator-=(rhs);
       }
 
-      template <template<class> class F>
-      R<Type> operator * (Matrix<F> const &rhs) const
+      template <template<class> class F,template<class> class R>
+      Matrix<Type,R>& operator * (Matrix<Type,F> const &rhs) const
       {
-        return static_cast<const Form<Type>>(this)->operator * (rhs);
+        return static_cast<const Form<Type>*>(this)->operator * (rhs);
       }
 
-      // Form<Type> operator * (Vector<Type> const &rhs) const
-      // {
-      //   return static_cast<const Form&>(*this) * rhs;
-      // }
+      Vector<Type> operator * (Vector<Type> const &rhs) const
+      {
+        return static_cast<const Form<Type>*>(*this) * rhs;
+      }
 
       // Basic Matrix projection, syntax like mat[{i,j}]
       Type operator[](std::initializer_list<std::size_t> ij) const
@@ -100,8 +101,16 @@ namespace numlib
       {
         return static_cast<const Form<Type>*>(this)->M();
       }
-    private:
-      std::shared_ptr<Matrix<Type,Form>> returnable;
+
+      bool checki(std::size_t const i) const
+      {
+        return static_cast<const Form<Type>*>(this)->checki(i);
+      }
+
+      bool checkj(std::size_t const j) const
+      {
+        return static_cast<const Form<Type>*>(this)->checkj(j);
+      }
   }; // class Matrix
 
   template <class Type, template<class> class Form>

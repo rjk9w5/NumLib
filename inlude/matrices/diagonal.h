@@ -1,13 +1,13 @@
 /*
- *  dense.h
+ *  diagonal.h
  *  Author: Ryan Krattiger
  *
  *  Namespace: numlib
- *  Brief: Dense Matrix Form class.
+ *  Brief: Diag Matrix Form class.
  */
 
-#ifndef DENSE_H_
-#define DENSE_H_
+#ifndef DIAGONAL_H_
+#define DIAGONAL_H_
 
 #include <utility>
 #include "matrix.h"
@@ -15,52 +15,57 @@
 namespace numlib
 {
   template <class Type>
-  class Dense;
+  class Diag;
 
   template <class Type>
   void
   swap(
-    Dense<Type> &d1,
-    Dense<Type> &d2);
+    Diag<Type> &d1,
+    Diag<Type> &d2);
 
   template <class Type>
-  class Dense: public Matrix<Type,Dense>
+  Diag<Type>
+  eye(
+    std::size_t n);
+
+  template <class Type>
+  class Diag: public Matrix<Type,Diag>
   {
     public:
-      Dense(): data_(), n_(0), m_(0) {};
-      Dense(
+      Diag(): data_(), n_(0) {};
+      Diag(
         std::size_t const &n);
-      Dense(
+      Diag(
         std::size_t const &n,
         std::size_t const &m);
 
-      Dense<Type>&
+      Diag<Type>&
       operator = (
-        Dense<Type> cpy);
+        Diag<Type> cpy);
 
-      Dense(
-        Dense<Type> const &src);
-      Dense(
-        Matrix<Type,Dense> const &src);
-      Dense(
-        Dense<Type> &&other);
-      ~Dense() {}
+      Diag(
+        Diag<Type> const &src);
+      Diag(
+        Matrix<Type,Diag> const &src);
+      Diag(
+        Diag<Type> &&other);
+      ~Diag() {}
 
       // Basic Matrix Math operations
       template <template <class> class F>
-      Dense<Type> operator + (Matrix<Type,F> const &rhs) const;
+      Diag<Type> operator + (Matrix<Type,F> const &rhs) const;
 
       template <template <class> class F>
-      Dense<Type>& operator += (Matrix<Type,F> const &rhs);
+      Diag<Type>& operator += (Matrix<Type,F> const &rhs);
 
       template <template <class> class F>
-      Dense<Type> operator - (Matrix<Type,F> const &rhs) const;
+      Diag<Type> operator - (Matrix<Type,F> const &rhs) const;
 
       template <template <class> class F>
-      Dense<Type>& operator -= (Matrix<Type,F> const &rhs);
+      Diag<Type>& operator -= (Matrix<Type,F> const &rhs);
 
       template <template <class> class F>
-      Dense<Type> operator * (Matrix<Type,F> const &rhs) const;
+      Matrix<Type,F>& operator * (Matrix<Type,F> const &rhs) const;
       
       Vector<Type> operator * (Vector<Type> const &rhs) const;
 
@@ -69,7 +74,7 @@ namespace numlib
       Type& operator[](std::initializer_list<std::size_t> ij);
 
       // Clone idiom for copying
-      std::shared_ptr<Dense<Type>> clone() const;
+      std::shared_ptr<Diag<Type>> clone() const;
 
       // Dimension information access
       std::size_t N() const;
@@ -77,17 +82,19 @@ namespace numlib
       bool checki(std::size_t const i) const;
       bool checkj(std::size_t const j) const;
 
-      friend void swap <> (Dense<Type> &d1, Dense<Type> &d2);
+      friend void swap <> (Diag<Type> &d1, Diag<Type> &d2);
 
       // IO Operations
       void print(std::ostream &out) const;
 
     private:
       numlib::Vector<Type> data_;
-      std::size_t n_, m_;
-  }; // class Dense
+      std::size_t n_;
+      constexpr static const Type __empty_const__ = 0;
+      constexpr static Type __empty__ = 0;
+  }; // class Diag
 } // namespace numlib
 
-#include "dense.hpp"
+#include "diagonal.hpp"
 
 #endif
