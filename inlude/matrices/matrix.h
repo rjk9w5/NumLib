@@ -122,6 +122,12 @@ namespace numlib
     static_cast<const Form<Type>*>(&mat)->print(out);
     return out;
   }
+
+  namespace output
+  {
+    constexpr static const int __width__ = 14;
+    constexpr static const int __precision__ = 7;
+  }
 } // namespace numlib
 
 #endif
