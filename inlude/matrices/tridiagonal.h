@@ -11,6 +11,7 @@
 
 #include <utility>
 #include "matrix.h"
+#include "dense.h"
 
 namespace numlib
 {
@@ -22,11 +23,6 @@ namespace numlib
   swap(
     TriDiag<Type> &d1,
     TriDiag<Type> &d2);
-
-  template <class Type>
-  TriDiag<Type>
-  eye(
-    std::size_t n);
 
   template <class Type>
   class TriDiag: public Matrix<Type,TriDiag>
@@ -65,7 +61,7 @@ namespace numlib
       TriDiag<Type>& operator -= (Matrix<Type,F> const &rhs);
 
       template <template <class> class F>
-      Matrix<Type,F>& operator * (Matrix<Type,F> const &rhs) const;
+      Matrix<Type,numlib::Dense>& operator * (Matrix<Type,F> const &rhs) const;
 
       Vector<Type> operator * (Vector<Type> const &rhs) const;
 

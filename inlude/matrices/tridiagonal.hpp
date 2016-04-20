@@ -88,7 +88,7 @@ numlib::TriDiag<Type>::operator += (
   {
     for(std::size_t j=(i?i-1:i); j<(i+1<n_?i+1:i); ++j)
     {
-      this->operator[]({i,j}) +=ret->operator[]({i,j});
+      this->operator[]({i,j}) += rhs[{i,j}];
     }
   }
   return *this;
@@ -128,7 +128,7 @@ numlib::TriDiag<Type>::operator -= (
   {
     for(std::size_t j=(i?i-1:i); j<(i+1<n_?i+1:i); ++j)
     {
-      this->operator[]({i,j}) -=ret->operator[]({i,j});
+      this->operator[]({i,j}) -= rhs[{i,j}];
     }
   }
   return *this;
@@ -136,7 +136,7 @@ numlib::TriDiag<Type>::operator -= (
 // Re-write to be more efficient for TriDiagonal Form matrices!
 template <class Type>
 template <template <class> class F>
-numlib::Matrix<Type,Dense>&
+numlib::Matrix<Type,numlib::Dense>&
 numlib::TriDiag<Type>::operator * (
   Matrix<Type,F> const &rhs) const
 {
@@ -275,12 +275,18 @@ numlib::TriDiag<Type>::print(
 {
   if(N()>0)
   {
-    for(std::size_t i=0; i<N(); ++i)
+    for(std::size_t i=0; i<data_.get_size()-2; ++i)
     {
-      out << std::setw(8*i) << "" << ' ';
-      out << std::left << std::setw(8) << std::scientific
-          << data_[i] << ' ';
-      out << '\n';
+      out << std::left << std::setw(output::__width__)
+          << std::setprecision(output::__precision__) << std::scientific
+          << data_[i] << (i%3==1?'\n':' ');
+    }
+    out << std::setw(output::__width__+1) << ' ';
+    for(std::size_t i=data_.get_size()-2; i<data_.get_size(); ++i)
+    {
+      out << std::left << std::setw(output::__width__)
+          << std::setprecision(output::__precision__) << std::scientific
+          << data_[i] << (i%3==1?'\n':' ');
     }
   }
   return;
