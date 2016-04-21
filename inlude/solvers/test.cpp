@@ -1,36 +1,76 @@
 #include "qr_orthonormal.h"
 #include "../matrices/matrices.h"
 #include "../common/istream_utility.h"
+#include "../common/exceptions.h"
+#include  <string>
 
 using namespace numlib;
 
-void read_input(char* fname);
+Dense<double> read_input(std::ifstream &fin);
 
-int main(int narg; char** args)
+int main(int argc, char* argv[])
 {
-  Dense<Type> dmat;
-  if(narg>1) read_input(args[1], dmat);
+  try
+  {
+    std::ifstream fin;
+
+    Dense<double> dmat, Q;
+    UpperTriangle<double> R;
+    QR_OrthoNormal<double> qr;
+
+    for(int i=0; i<argc; ++i)
+    {
+      std::cout << argv[i] << ' ';
+    }
+    std::cout << '\n';
+
+    if(argc>1)
+      fin.open(argv[1]);
+    else
+      fin.open("test2");
+
+    if(!fin.is_open())
+      throw numlib::FatalError("Bad File!");
+
+    dmat = read_input(fin);
+
+    std::cout << dmat << '\n';
+    int loop = 10000;
+    while(loop--)
+    {
+      qr(dmat,Q,R);
+      std::cout << Q << '\n';
+      std::cout << R << '\n';
+      dmat = R*Q;
+      std::cout << dmat << '\n';
+    }
+  }
+  catch(numlib::Exception& e)
+  {
+    std::cerr << e.errMsg() << '\n';
+  }
+  return 0;
 }
 
-void read_input(char* fname)
+Dense<double> read_input(std::ifstream& fin)
 {
-  std::ifstream fin;
-  fin.open(fname);
+  std::size_t n;
+  fin >> n;
 
-  std::size_t n,m;
-  if(fin.isopen() && checkIstream(fin))
-    fin >> n;
+  std::cout << n << '\n';
 
-  if(n_>0 && m_>0)
+  Dense<double> var(n);
+  if(n)
   {
-    for(std::size_t i=0; i<n_; ++i)
+    for(std::size_t i=0; i<n; ++i)
     {
-      for(std::size_t j=0; j<m_; ++j)
+      for(std::size_t j=0; j<n; ++j)
       {
         if(checkIstream(fin))
           fin >> var[{i,j}];
       }
     }
   }
-  return;
+  std::cout << var << '\n';
+  return var;
 }

@@ -26,9 +26,8 @@ CXXFLAGS = -O3 -std=c++11 -Wall -W -pedantic-errors -g -pg
 # The following 2 lines only work with gnu make.
 # It's much nicer than having to list them out,
 # and less error prone.
-SOURCES = $(wildcard *.cpp)
-HEADERS = $(wildcard *.h)
-
+SOURCES = $(wildcard *.cpp) $(wildcard ../common/*.cpp)
+HEADERS = $(wildcard *.h) $(wildcard ../matrices/*.h) $(wildcard ../vector/*.h)
 # With Sun's make it has to be done like this, instead of
 # using wildcards.
 # Well, I haven't figured out another way yet.

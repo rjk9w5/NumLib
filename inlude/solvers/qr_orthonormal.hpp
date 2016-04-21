@@ -7,7 +7,7 @@
  */
 
 template <class Type>
-void numlib::QR_OrthoNormal::operator() (
+void numlib::QR_OrthoNormal<Type>::operator() (
   numlib::Dense<Type> const &A,
   numlib::Dense<Type> &Q,
   numlib::UpperTriangle<Type> &R)
@@ -16,7 +16,7 @@ void numlib::QR_OrthoNormal::operator() (
   Vector<Vector<Type>> u, a;
 
   if(!(n > 0 && A.M()==A.N()))
-    throw DimensionMismatch("numlib::QR_OrthoNormal::operator()(...)")
+    throw DimensionMismatch("numlib::QR_OrthoNormal::operator()(...)");
 
     // Initialize u as a copy of A in vector form
     u.set_size(n);
@@ -25,13 +25,10 @@ void numlib::QR_OrthoNormal::operator() (
       u[i].set_size(n);
       for(std::size_t j=0; j<n; ++j)
       {
-        u[i] = A[{j,i}];
+        u[i][j] = A[{j,i}];
       }
     }
     a = u;
-
-    std::cout << a << '\n';
-    std::cout << u << '\n';
 
     for(size_t k=0; k<n; ++k)
     {
@@ -52,7 +49,7 @@ void numlib::QR_OrthoNormal::operator() (
 
 template<class Type>
 numlib::Vector<Type>
-numlib::QR_OrthoNormal::proj(
+numlib::QR_OrthoNormal<Type>::proj(
   numlib::Vector<Type> const &e,
   numlib::Vector<Type> const &a)
 {
@@ -61,9 +58,9 @@ numlib::QR_OrthoNormal::proj(
 
 template<class Type>
 void
-numlib::QR_OrthoNormal::unitize(numlib::Vector<Type> &u2e)
+numlib::QR_OrthoNormal<Type>::unitize(numlib::Vector<Type> &u2e)
 {
-  Type norm = u2e*u2e;
+  Type norm = sqrt(u2e*u2e);
 
   for(auto& u: u2e)
     u/=norm;
@@ -71,8 +68,9 @@ numlib::QR_OrthoNormal::unitize(numlib::Vector<Type> &u2e)
   return;
 }
 
-Dense<Type>
-makeQ(
+template<class Type>
+numlib::Dense<Type>
+numlib::QR_OrthoNormal<Type>::makeQ(
   Vector<Vector<Type>> const &e)
 {
   Dense<Type> ret(e.get_size());
@@ -87,8 +85,9 @@ makeQ(
   return ret;
 }
 
-UpperTriangle<Type>
-makeR(
+template<class Type>
+numlib::UpperTriangle<Type>
+numlib::QR_OrthoNormal<Type>::makeR(
   Vector<Vector<Type>> const &e,
   Vector<Vector<Type>> const &a)
 {

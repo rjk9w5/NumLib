@@ -28,7 +28,7 @@
 #define QR_DECOMP_H_
 
 #include "../vector/vector.h"
-#include "../matrices/dense.h"
+#include "../matrices/matrices.h"
 #include "../common/exceptions.h"
 #include <cmath>
 #include <iostream>
@@ -42,11 +42,11 @@ namespace numlib
       void operator() (
         numlib::Dense<Type> const &A,
         numlib::Dense<Type> &Q,
-        numlib::UpperTriangle<Type> R);
+        numlib::UpperTriangle<Type> &R);
     private:
       numlib::Vector<Type> proj(
         numlib::Vector<Type> const &e,
-        numlib::Vector<Type> const &a)
+        numlib::Vector<Type> const &a);
 
       void unitize(numlib::Vector<Type> &u2e);
 
