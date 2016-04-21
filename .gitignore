@@ -27,3 +27,14 @@
 *.out
 *.app
 driver
+
+# Makefile products
+depend
+*.off
+
+# Profiling data
+massif.out*
+callgrind.out*
+cachegrind.out*
+
+output.txt
