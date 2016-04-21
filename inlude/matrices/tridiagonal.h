@@ -87,6 +87,7 @@ namespace numlib
       numlib::Vector<Type> data_;
       std::size_t n_;
       constexpr static const Type __empty_const__ = 0;
+      Type dummy;
   }; // class TriDiag
 } // namespace numlib
 

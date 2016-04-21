@@ -196,9 +196,8 @@ numlib::UpperTriangle<Type>::operator[](
   }
   else
   {
-    Type* emp;
-    *emp = __empty_const__;
-    return *emp;
+    dummy=0;
+    return dummy;
   }
 }
 
