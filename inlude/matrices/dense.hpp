@@ -74,7 +74,7 @@ numlib::Dense<Type>&
 numlib::Dense<Type>::operator += (
   Matrix<Type,F> const &rhs)
 {
-  if(N()!=rhs.N()||M()!=rhs.M()) 
+  if(N()!=rhs.N()||M()!=rhs.M())
     throw DimensionMismatch("Matrix addition with operator += failed");
 
   for(std::size_t i=0; i<N(); ++i)
@@ -103,7 +103,7 @@ numlib::Dense<Type>&
 numlib::Dense<Type>::operator -= (
   Matrix<Type,F> const &rhs)
 {
-  if(N()!=rhs.N()||M()!=rhs.M()) 
+  if(N()!=rhs.N()||M()!=rhs.M())
     throw DimensionMismatch("Matrix addition with operator += failed");
 
   for(std::size_t i=0; i<N(); ++i)
@@ -122,7 +122,7 @@ numlib::Dense<Type>
 numlib::Dense<Type>::operator * (
   Matrix<Type,F> const &rhs) const
 {
-  if(M() != rhs.N()) 
+  if(M() != rhs.N())
     throw numlib::DimensionMismatch(
       "numlib::Dense<Type>operator *(Matrix<Type,F> const &rhs)");
 
@@ -133,7 +133,7 @@ numlib::Dense<Type>::operator * (
     for(std::size_t j=0; j<M(); ++j)
     {
       ret[{i,j}] = 0;
-      for(std::size_t k=0; k<N(); ++k)
+      for(std::size_t k=0; k<M(); ++k)
       {
         ret[{i,j}] += this->operator[]({i,k})*rhs[{k,j}];
       }
@@ -144,7 +144,7 @@ numlib::Dense<Type>::operator * (
 }
 
 template <class Type>
-numlib::Vector<Type> 
+numlib::Vector<Type>
 numlib::Dense<Type>::operator * (
   Vector<Type> const &rhs) const
 {
@@ -169,7 +169,7 @@ template <class Type>
 Type numlib::Dense<Type>::operator[](
   std::initializer_list<std::size_t> ij) const
 {
-  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M())
     throw RangeException("Dense op []");
 
   return data_[*(ij.begin())*M() + *(ij.begin()+1)];
@@ -179,7 +179,7 @@ template <class Type>
 Type& numlib::Dense<Type>::operator[](
   std::initializer_list<std::size_t> ij)
 {
-  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M()) 
+  if(ij.size() != 2 || *(ij.begin()) >= N() || *(ij.begin()+1) >= M())
     throw RangeException("Dense op []");
 
   return data_[*(ij.begin())*M() + *(ij.begin()+1)];
@@ -225,7 +225,7 @@ numlib::Dense<Type>::checkj(
 
 template <class Type>
 void numlib::swap(
-  Dense<Type> &d1, 
+  Dense<Type> &d1,
   Dense<Type> &d2)
 {
   using std::swap;
