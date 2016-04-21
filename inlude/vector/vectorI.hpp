@@ -142,7 +142,7 @@ void numlib::Vector<T>::remove(const size_t i)
   if(!(i < size_ && i >=0))
     throw numlib::FatalError("numlib::Vector<T>::remove(const size_t i): "\
                          "Index 'i' is out of range\n");
-  
+
   for(size_t j = i; j < size_ - 1; ++j)
     data_[j] = data_[j+1];
 
@@ -252,7 +252,7 @@ T numlib::Vector<T>::dot(const numlib::Vector<T>& vec) const
     throw numlib::FatalError("numlib::Vector<T>::dot(const numlib::Vector<T>& vec): "\
                          "Vectors must be of same size!\n");
 
-  T ret;
+  T ret=0;
   size_t it = 0;
   for(auto& val: *this)
     ret += val*vec[it++];
