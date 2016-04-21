@@ -2,7 +2,6 @@
 #include "../matrices/matrices.h"
 #include "../common/istream_utility.h"
 #include "../common/exceptions.h"
-#include  <string>
 
 using namespace numlib;
 
