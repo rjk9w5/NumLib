@@ -3,16 +3,17 @@
  *
  *  Created on: Mar 12, 2016
  *      Author: Ryan Krattiger (rjk9w5)
- *       Brief: 
+ *       Brief:
 \* ************************************************************************** */
 
 
 #include "istream_utility.h"
 
-void oonm::checkIstream(std::istream& in)
+bool numlib::checkIstream(std::istream& in)
 {
+  bool check(in.eof() || in.bad());
   if(in.eof() || in.bad())
-    throw oonm::FatalError("In std::istream: Stream not good!");
+    throw numlib::FatalError("In std::istream: Stream not good!");
 
-  return;
+  return !check;
 }
