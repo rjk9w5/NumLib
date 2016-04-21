@@ -129,7 +129,7 @@ numlib::UpperTriangle<Type>::operator * (
   {
     for(std::size_t j=0; j<rhs.M(); ++j)
     {
-      ret[{i,j}] = 0;
+      ret->operator[]({i,j}) = 0;
       for(std::size_t k=i; k<M(); ++k)
       {
         ret->operator[]({i,j}) += this->operator[]({i,k})*rhs[{k,j}];
