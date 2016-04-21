@@ -254,3 +254,25 @@ numlib::Dense<Type>::print(
   }
   return;
 }
+
+// template <class Type>
+// void
+// numlib::Dense<Type>::read(
+//   std::istream &in) const
+// {
+//   std::size_t n,m;
+//   if()
+//   if(n_>0 && m_>0)
+//   {
+//     for(std::size_t i=0; i<n_; ++i)
+//     {
+//       for(std::size_t j=0; j<m_; ++j)
+//       {
+//         out << std::left << std::setw(8) << std::scientific
+//             << data_[i*m_ + j] << ' ';
+//       }
+//       out << '\n';
+//     }
+//   }
+//   return;
+// }

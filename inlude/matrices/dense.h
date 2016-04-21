@@ -61,7 +61,7 @@ namespace numlib
 
       template <template <class> class F>
       Dense<Type> operator * (Matrix<Type,F> const &rhs) const;
-      
+
       Vector<Type> operator * (Vector<Type> const &rhs) const;
 
       // Basic Matrix projection, syntax like mat[{i,j}]
@@ -81,6 +81,8 @@ namespace numlib
 
       // IO Operations
       void print(std::ostream &out) const;
+
+      // void read(std::istream &in);
 
     private:
       numlib::Vector<Type> data_;

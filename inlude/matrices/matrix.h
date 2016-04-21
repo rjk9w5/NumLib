@@ -9,11 +9,12 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-#include "../vector/vector.h"
-#include <memory>
-#include <ostream>
-#include <iomanip>
-#include <initializer_list>
+#include "../vector/vector.h" // numlib::Vector
+#include <memory> // std::shared_ptr
+#include <ostream> // std::ostream
+#include <istream> // std::istream
+#include <iomanip> // std::left, std::setw, std::setprecision, std::scientific
+#include <initializer_list> // std::initializer_list
 
 namespace numlib
 {
