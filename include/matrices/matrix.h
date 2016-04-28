@@ -88,7 +88,7 @@ namespace numlib
       }
 
       // Clone idiom for copying
-      std::shared_ptr<Matrix<Type, Form>> clone() const
+      Matrix<Type, Form>* clone() const
       {
         return static_cast<const Form<Type>*>(this)->clone();
       }

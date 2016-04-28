@@ -187,10 +187,10 @@ Type& numlib::Dense<Type>::operator[](
 
 // Clone idiom for copying
 template <class Type>
-std::shared_ptr<numlib::Dense<Type>>
+numlib::Dense<Type>*
 numlib::Dense<Type>::clone() const
 {
-  return std::shared_ptr<Dense<Type>>(new Dense<Type>(*this));
+  return new Dense<Type>(*this);
 }
 
 template <class Type>

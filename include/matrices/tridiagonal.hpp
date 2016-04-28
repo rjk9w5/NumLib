@@ -220,10 +220,10 @@ Type& numlib::TriDiag<Type>::operator[](
 
 // Clone idiom for copying
 template <class Type>
-std::shared_ptr<numlib::TriDiag<Type>>
+numlib::TriDiag<Type>*
 numlib::TriDiag<Type>::clone() const
 {
-  return std::shared_ptr<TriDiag<Type>>(new TriDiag<Type>(*this));
+  return new TriDiag<Type>(*this);
 }
 
 template <class Type>
