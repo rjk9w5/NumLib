@@ -1,8 +1,9 @@
 /*
-    rk2.h
-
-    Ryan Krattiger
-
+ *  rk2.h
+ *  Author: Ryan Krattiger
+ *
+ *  Namespace: numlib
+ *  Brief: Runge-Kutta 2nd order
  */
 
 #ifndef ODE_RK2_H_

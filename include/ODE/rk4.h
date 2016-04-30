@@ -1,3 +1,11 @@
+/*
+ *  rk4.h
+ *  Author: Ryan Krattiger
+ *
+ *  Namespace: numlib
+ *  Brief: Runge-Kutta 4th order
+ */
+
 #ifndef ODE_RK4_H_
 #define ODE_RK4_H_
 
