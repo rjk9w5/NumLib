@@ -140,14 +140,14 @@ numlib::Vector<T> sqrt(const numlib::Vector<T>& vec)
 }
 
 template <class T>
-numlib::Vector<T> abs(const numlib::Vector<T>& vec)
+numlib::Vector<T> fabs(const numlib::Vector<T>& vec)
 {
   numlib::Vector<T> ret(vec.get_size());
   size_t it = 0;
 
   for(auto& val: vec)
   {
-    ret[it++] = abs(val);
+    ret[it++] = fabs(val);
   }
 
   return ret;

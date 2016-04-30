@@ -531,7 +531,7 @@ template <class Ele_T>
 numlib::Vector<Ele_T> sqrt(const numlib::Vector<Ele_T>& vec);
 
 template <class Ele_T>
-numlib::Vector<Ele_T> abs(const numlib::Vector<Ele_T>& vec);
+numlib::Vector<Ele_T> fabs(const numlib::Vector<Ele_T>& vec);
 
 #include "vectorI.hpp"
 #include "vectorG.hpp"
