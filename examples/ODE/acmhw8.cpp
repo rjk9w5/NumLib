@@ -10,16 +10,13 @@
 #include <fstream>
 #include <cmath>
 #include <iomanip>
-#include "../vector/vector.h"
-#include "rk2.h"
-#include "rk4.h"
-#include "abash.h"
+#include "ode_examples.h"
 
 #define PRINT_PLOT_DATA  1
 
 using namespace numlib;
 
-int main(int argc, char** args)
+int acmhw8(int argc, char** args)
 {
   if(argc) std::cout << args[0] << '\n';
 

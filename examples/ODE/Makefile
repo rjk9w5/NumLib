@@ -58,6 +58,7 @@ clean:
 	-@rm -f core
 	-@rm -f driver
 	-@rm -f depend
+	-@rm -f gmon.out
 	-@rm -f $(OBJECTS)
 
 # Automatically generate dependencies and include them in Makefile
