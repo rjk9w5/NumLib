@@ -1,11 +1,11 @@
 template <class T, class TFunc>
-numlib::Vector<typename float_trait<T>::T_float> 
+numlib::Vector<typename promote_float<T>::type>
 rk2_heun(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t const n)
 {
-  numlib::Vector<typename float_trait<T>::T_float> result(n+1);
-  typename float_trait<T>::T_float h = static_cast<typename float_trait<T>::T_float>((limits[1] - limits[0]))/n;
+  numlib::Vector<typename promote_float<T>::type> result(n+1);
+  typename promote_float<T>::type h = static_cast<typename promote_float<T>::type>((limits[1] - limits[0]))/n;
 
-  typename float_trait<T>::T_float c = static_cast<typename float_trait<T>::T_float>(2)/3, k1, k2;
+  typename promote_float<T>::type c = static_cast<typename promote_float<T>::type>(2)/3, k1, k2;
 
   result[0] = initv;
 
@@ -20,13 +20,13 @@ rk2_heun(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t con
 }
 
 template <class T, class TFunc>
-numlib::Vector<typename float_trait<T>::T_float> 
+numlib::Vector<typename promote_float<T>::type>
 rk2_modEuler(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t const n)
 {
-  numlib::Vector<typename float_trait<T>::T_float> result(n+1);
-  typename float_trait<T>::T_float h = static_cast<typename float_trait<T>::T_float>((limits[1] - limits[0]))/n;
+  numlib::Vector<typename promote_float<T>::type> result(n+1);
+  typename promote_float<T>::type h = static_cast<typename promote_float<T>::type>((limits[1] - limits[0]))/n;
 
-  typename float_trait<T>::T_float c = 1, k1, k2;
+  typename promote_float<T>::type c = 1, k1, k2;
 
   result[0] = initv;
 
@@ -41,13 +41,13 @@ rk2_modEuler(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t
 }
 
 template <class T, class TFunc>
-numlib::Vector<typename float_trait<T>::T_float> 
+numlib::Vector<typename promote_float<T>::type>
 rk2_midEuler(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t const n)
 {
-  numlib::Vector<typename float_trait<T>::T_float> result(n+1);
-  typename float_trait<T>::T_float h = static_cast<typename float_trait<T>::T_float>((limits[1] - limits[0]))/n;
+  numlib::Vector<typename promote_float<T>::type> result(n+1);
+  typename promote_float<T>::type h = static_cast<typename promote_float<T>::type>((limits[1] - limits[0]))/n;
 
-  typename float_trait<T>::T_float c = 0.5, k1, k2;
+  typename promote_float<T>::type c = 0.5, k1, k2;
 
   result[0] = initv;
 

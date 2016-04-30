@@ -13,11 +13,11 @@
 #include "rk4.h"
 
 template <class T, class TFunc>
-numlib::Vector<typename float_trait<T>::T_float> 
+numlib::Vector<typename promote_float<T>::type>
 abash_2(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t const n);
 
 template <class T, class TFunc>
-numlib::Vector<typename float_trait<T>::T_float> 
+numlib::Vector<typename promote_float<T>::type>
 abash_3(const TFunc f,T const &initv, numlib::Vector<T> limits, std::size_t const n);
 
 #include "abash.hpp"
