@@ -1,9 +1,9 @@
 #include "blasius.h"
 #include <iostream>
 
-numlib::Vector<numlib::Vector<double>> 
+numlib::Vector<numlib::Vector<double>>
 blasius(
-  const double ubound, 
+  const double ubound,
   const int n)
 {
   numlib::Vector<numlib::Vector<double>> solution;
@@ -15,9 +15,9 @@ blasius(
 
   auto f = [&](const double x) -> double
   {
-    solution = rk2_heun(fode, 
-                        numlib::Vector<double>({0,0,x}), 
-                        numlib::Vector<double>({0.0,ubound}), 
+    solution = rk4_default(fode, 
+                        numlib::Vector<double>({0,0,x}),
+                        numlib::Vector<double>({0.0,ubound}),
                         n);
     return solution[n][1]-1;
   };
