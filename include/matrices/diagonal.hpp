@@ -195,7 +195,7 @@ Type& numlib::Diag<Type>::operator[](
 
 // Clone idiom for copying
 template <class Type>
-std::shared_ptr<numlib::Diag<Type>>
+numlib::Diag<Type>*
 numlib::Diag<Type>::clone() const
 {
   return std::shared_ptr<Diag<Type>>(new Diag<Type>(*this));

@@ -3,7 +3,7 @@
  *
  *  Created on: Apr 8, 2016
  *      Author: Ryan Krattiger (rjk9w5)
- *       Brief: 
+ *       Brief:
 \* ************************************************************************** */
 
 /*
@@ -19,7 +19,7 @@
  */
 
 /*
- *    Function: CSpline(oonm::Vector<oonm::Coordinate<T>>)
+ *    Function: CSpline(numlib::Vector<numlib::Coordinate<T>>)
  *       Brief: Cosntructor from set of data points
  *       Input: Data set used to generate curve fit
  *         Pre: None
@@ -27,7 +27,7 @@
  */
 
 /*
- *    Function: points(oonm::Vector<oonm::Coordinate<T>>)
+ *    Function: points(numlib::Vector<numlib::Coordinate<T>>)
  *       Brief: Calculates curve fit from set of data points
  *       Input: Data set used to generate curve fit
  *         Pre: None
@@ -36,7 +36,7 @@
  */
 
 /*
- *    Function: operator ()(oonm::Vector<oonm::Coordinate<T>>)
+ *    Function: operator ()(numlib::Vector<numlib::Coordinate<T>>)
  *       Brief: Calculates curve fit from set of data points
  *         Pre: Must call points or Vector<Coordinate> constructor first
  *        Post: Evaluates the cubic spline curve Fit from input data
@@ -46,26 +46,27 @@
 #ifndef CSPLINE_H_
 #define CSPLINE_H_
 
-#include "exceptions.h"
-#include "cubic.h"
-#include "pair.h"
-#include "coord.h"
-#include "matrix_tridiag.h"
-#include "linearsystem_solvers.h"
-#include "vector.h"
+#include "../common/exceptions.h"
+#include "../common/cubic.h"
+#include "../common/pair.h"
+#include "../common/coord.h"
+#include "../matrices/tridiagonal.h"
+#include "../linearsystems/linearsystem_solvers.h"
+#include "../vector/vector.h"
 #include <fstream>
 #include <cstring>
 
-namespace oonm
+namespace numlib
 {
   template <class T>
   class CSpline
   {
     public:
       CSpline() = default;
-      CSpline(oonm::Vector<oonm::Coordinate<T>> const &pts);
+      CSpline(numlib::Vector<numlib::Coordinate<T>> const &pts);
 
-      void points(oonm::Vector<oonm::Coordinate<T>> const &pts);
+      void points(numlib::Vector<numlib::Coordinate<T>> const &pts);
+      void points_clamped(numlib::Vector<numlib::Coordinate<T>> const &pts, T const &fp0, T const &fpN);
 
       T operator ()(T const &x) const;
 
@@ -74,9 +75,9 @@ namespace oonm
     private:
       std::size_t get_cubic(T const &x) const;
       T lx_;
-      oonm::Vector<oonm::Pair<double,oonm::Cubic<double>>> cspline_;
+      numlib::Vector<numlib::Pair<double,numlib::Cubic<double>>> cspline_;
   };
-} // oonm
+} // numlib
 
 #include "csplineI.hpp"
 

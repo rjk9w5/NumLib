@@ -3,38 +3,34 @@
  *
  *  Created on: Apr 8, 2016
  *      Author: Ryan Krattiger (rjk9w5)
- *       Brief: 
+ *       Brief:
 \* ************************************************************************** */
 
 template <class T>
-oonm::CSpline<T>::CSpline(
-    oonm::Vector<oonm::Coordinate<T>> const &pts)
+numlib::CSpline<T>::CSpline(
+    numlib::Vector<numlib::Coordinate<T>> const &pts)
 {
   points(pts);
 }
 
 template <class T>
 void
-oonm::CSpline<T>::points(
-    oonm::Vector<oonm::Coordinate<T>> const &inp)
+numlib::CSpline<T>::points(
+    numlib::Vector<numlib::Coordinate<T>> const &inp)
 {
-  oonm::TDMA<double> td_solver;
+  numlib::TDMA<double> td_solver;
   std::size_t pts = inp.get_size();
-  oonm::Vector<double> h, b, c, abcd_tmp(4);
+  numlib::Vector<double> h(pts-1), b(pts), c, abcd_tmp(4);
 
-  oonm::MatrixTriDiag<double> tdmat;
+  numlib::TriDiag<double> tdmat(pts);
 
   lx_ = inp[pts-1].x();
-
-  h.set_size(pts-1);
 
   for(std::size_t i=0; i<pts-1; ++i)
   {
     h[i] = inp[i+1].x() - inp[i].x();
   }
 
-  tdmat.set_size(pts);
-  b.set_size(pts);
   tdmat(0,0) = 1;
   tdmat(0,1) = 0;
   b[0] = 0;
@@ -46,7 +42,60 @@ oonm::CSpline<T>::points(
   {
     tdmat(i,i-1) = h[i-1];
     tdmat(i,i) = 2*(h[i-1] + h[i]);
-    tdmat(i,i+1) = h[i+1];
+    tdmat(i,i+1) = h[i];
+
+    b[i] = (3/h[i])*(inp[i+1].y() - inp[i].y()) -
+           (3/h[i-1])*(inp[i].y() - inp[i-1].y());
+  }
+
+  c = td_solver(tdmat,b);
+
+  cspline_.set_size(pts-1);
+
+  for(std::size_t i=0; i<pts-1; ++i)
+  {
+    cspline_[i].key_ = inp[i].x();
+
+    abcd_tmp[0] = inp[i].y();
+    abcd_tmp[1] = (1/h[i])*(inp[i+1].y() - inp[i].y()) -
+                  (h[i]/3)*(2*c[i] + c[i+1]);
+    abcd_tmp[2] = c[i];
+    abcd_tmp[3] = (c[i+1] - c[i])/(3*h[i]);
+
+    cspline_[i].value_.coeff(abcd_tmp);
+  }
+}
+
+template <class T>
+void
+numlib::CSpline<T>::points_clamped(
+    numlib::Vector<numlib::Coordinate<T>> const &inp, T const &fp0, T const &fpN)
+{
+  numlib::TDMA<double> td_solver;
+  std::size_t pts = inp.get_size();
+  numlib::Vector<double> h(pts-1), b(pts), c, abcd_tmp(4);
+
+  numlib::TriDiag<double> tdmat(pts);
+
+  lx_ = inp[pts-1].x();
+
+  for(std::size_t i=0; i<pts-1; ++i)
+  {
+    h[i] = inp[i+1].x() - inp[i].x();
+  }
+
+  tdmat(0,0) = 2*h[0];
+  tdmat(0,1) = h[0];
+  b[0] = (3/h[0])*(inp[1].y() - inp[0].y()) - 3*fp0;
+  tdmat(pts-1,pts-2) = h[pts-2];
+  tdmat(pts-1,pts-1) = 2*h[pts-2];
+  b[pts-1] = -(3/h[pts-2])*(inp[pts-1].y() - inp[pts-2].y()) + 3*fpN;
+
+  for(std::size_t i=1; i<pts-1; ++i)
+  {
+    tdmat(i,i-1) = h[i-1];
+    tdmat(i,i) = 2*(h[i-1] + h[i]);
+    tdmat(i,i+1) = h[i];
 
     b[i] = (3/h[i])*(inp[i+1].y() - inp[i].y()) -
            (3/h[i-1])*(inp[i].y() - inp[i-1].y());
@@ -72,7 +121,7 @@ oonm::CSpline<T>::points(
 
 template <class T>
 T
-oonm::CSpline<T>::operator ()(
+numlib::CSpline<T>::operator ()(
     T const &x) const
 {
   std::size_t cnum = get_cubic(x);
@@ -81,15 +130,15 @@ oonm::CSpline<T>::operator ()(
 
 template <class T>
 void
-oonm::CSpline<T>::write_octave(
+numlib::CSpline<T>::write_octave(
     std::string fname)
 {
   std::ofstream fout;
-  oonm::Vector<T> a;
+  numlib::Vector<T> a;
 
   const char *file = (fname + ".m").c_str();
 
-  fout.open(file);
+  fout.open(fname + ".m");
 
   if(!fout.is_open()) std::cerr << "OOPS!\n";
 
@@ -127,11 +176,13 @@ oonm::CSpline<T>::write_octave(
 
   fout << "  end\n";
   fout << "end\n";
+  fout.close();
+  return;
 }
 
 template <class T>
 std::size_t
-oonm::CSpline<T>::get_cubic(T const &x) const
+numlib::CSpline<T>::get_cubic(T const &x) const
 {
   std::size_t cnum = 0;
   if(cspline_[cnum] > x)

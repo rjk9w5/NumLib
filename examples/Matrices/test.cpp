@@ -1,6 +1,6 @@
-#include "dense.h"
-#include "diagonal.h"
-#include "../vector/vector.h"
+#include "../../include/matrices/dense.h"
+#include "../../include/matrices/diagonal.h"
+#include "../../include/vector/vector.h"
 #include <iostream>
 
 using namespace numlib;
@@ -12,11 +12,11 @@ int main(int narg, char** args)
   try
   {
   #endif
-    std::size_t r(4),c(6);
+    std::size_t r(6),c(6);
     Vector<double> v({1,0,0,1,2,3});
     Dense<double> tm0(r,c);
     Diag<double> diagtwos = eye<double>(r);
-    std::shared_ptr<Matrix<double,Dense>> dmat2;
+    Matrix<double,Dense>* dmat2;
 
     for(std::size_t i=0; i<r; ++i)
     {
@@ -25,7 +25,7 @@ int main(int narg, char** args)
       {
         tm0.checkj(j);
         tm0.checki(i);
-        tm0[{i,j}] = i*j+1;
+        tm0(i,j) = i*j+1;
       }
     }
 
@@ -40,6 +40,8 @@ int main(int narg, char** args)
     std::cout << v << '\n';
 
     if(narg>1) std::cout << args[1] << '\n';
+
+    delete dmat2;
   #if USE_EXCEPTIONS
   }
   catch(Exception& e)

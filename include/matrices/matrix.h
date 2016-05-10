@@ -87,6 +87,16 @@ namespace numlib
         return static_cast<Form<Type>*>(this)->operator[](ij);
       }
 
+      Type operator()(std::size_t i, std::size_t j) const
+      {
+        return static_cast<const Form<Type>*>(this)->operator[]({i,j});
+      }
+
+      Type& operator()(std::size_t i, std::size_t j)
+      {
+        return static_cast<Form<Type>*>(this)->operator[]({i,j});
+      }
+
       // Clone idiom for copying
       Matrix<Type, Form>* clone() const
       {

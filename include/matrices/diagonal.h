@@ -74,7 +74,7 @@ namespace numlib
       Type& operator[](std::initializer_list<std::size_t> ij);
 
       // Clone idiom for copying
-      std::shared_ptr<Diag<Type>> clone() const;
+      Diag<Type>* clone() const;
 
       // Dimension information access
       std::size_t N() const;

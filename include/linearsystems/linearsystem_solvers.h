@@ -3,7 +3,7 @@
  *
  *  Created on: Mar 12, 2016
  *      Author: Ryan Krattiger (rjk9w5)
- *       Brief: 
+ *       Brief:
 \* ************************************************************************** */
 
 /*
@@ -85,37 +85,37 @@
 namespace numlib
 {
 
-  template <class Ele_T>
-  class sles
-  {
-    public:
-      numlib::Vector<Ele_T>
-      backsub(
-          numlib::Matrix<Ele_T,numlib::Dense> const &A,
-          numlib::Vector<Ele_T> const &b);
+  // template <class Ele_T, class Matrix_T>
+  // class sles
+  // {
+  //   public:
+  //     numlib::Vector<Ele_T>
+  //     backsub(
+  //         numlib::Matrix<Ele_T,Matrix_T> const &A,
+  //         numlib::Vector<Ele_T> const &b);
+  //
+  // //    numlib::Vector<Ele_T> forwardsub(
+  // //        numlib::Matrixsq<Ele_T> const &A,
+  // //        numlib::Vector<Ele_T> const &b);
+  // };
 
-  //    numlib::Vector<Ele_T> forwardsub(
-  //        numlib::Matrixsq<Ele_T> const &A,
-  //        numlib::Vector<Ele_T> const &b);
-  };
 
-
-  template <class Ele_T>
-  class gaussian_solver: private sles<Ele_T>
-  {
-    public:
-      gaussian_solver(): partial_pivot(false), full_pivot(false) {}
-      gaussian_solver(int const p): partial_pivot(p==1), full_pivot(p==2) {}
-
-      numlib::Vector<Ele_T>
-      operator ()(
-          numlib::Matrix<Ele_T,Dense> const &A,
-          numlib::Vector<Ele_T> b);
-
-    private:
-      using sles<Ele_T>::backsub;
-      bool partial_pivot, full_pivot;
-  };
+  // template <class Ele_T, class Matrix_T>
+  // class gaussian_solver: private sles<Ele_T,Matrix_T>
+  // {
+  //   public:
+  //     gaussian_solver(): partial_pivot(false), full_pivot(false) {}
+  //     gaussian_solver(int const p): partial_pivot(p==1), full_pivot(p==2) {}
+  //
+  //     numlib::Vector<Ele_T>
+  //     operator ()(
+  //         numlib::Matrix<Ele_T,Matrix_T> const &A,
+  //         numlib::Vector<Ele_T> b);
+  //
+  //   private:
+  //     using sles<Ele_T, Matrix_T>::backsub;
+  //     bool partial_pivot, full_pivot;
+  // };
 
   template <class Ele_T>
   class TDMA
@@ -127,7 +127,7 @@ namespace numlib
           numlib::Vector<Ele_T> b);
   };
 
-};
+} // namespace numlib
 
 #include "linearsystem_solversI.hpp"
 
